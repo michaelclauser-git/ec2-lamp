@@ -1,0 +1,35 @@
+---
+# tasks file for php
+#- name: Remove old PHP7 ppa repository
+#  apt_repository: repo='ppa:ondrej/php-7.0' state=absent
+#
+- name: Add PHP7 ppa repository
+  apt_repository: repo='ppa:ondrej/php'
+
+- name: Install packages
+  apt: pkg={{ item }} state=latest update_cache=yes
+  with_items:
+   - mysql-client
+   - php7.0-cli
+   - php7.0-fpm
+   - php7.0-dev
+   - php7.0-curl
+   - php7.0-gd
+   - php7.0-mbstring
+   - php7.0-mcrypt
+   - php7.0-mysql
+   - php7.0-soap
+   - php7.0-sqlite3
+   - php7.0-xml
+   - php7.0-zip
+   - php7.0-bcmath
+   - php7.0-ssh2
+   - php-rrd
+   - git
+  notify: restart Apache
+- name: Upload index.php file to the remote directory
+  copy:
+    src: index.php
+    dest: /var/www/html
+    owner: ec2-user
+    group: ec2-user
